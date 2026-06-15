@@ -1,0 +1,92 @@
+@model ResumeBuilderWebApp.Models.Resume
+
+@{
+    ViewData["Title"] = "Resume Details";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            <h2 class="text-primary fw-bold mb-3">@Model.Title</h2>
+
+            <h5 class="mb-2">@Model.FullName</h5>
+            <p class="mb-1"><strong>Email:</strong> @Model.Email</p>
+            <p class="mb-1"><strong>Phone:</strong> @Model.Phone</p>
+            <p class="mb-3"><strong>Summary:</strong> @Model.Summary</p>
+            <p class="text-secondary small">
+                <i class="bi bi-clock"></i> Created @Model.CreatedAt.ToString("dd MMM yyyy, h:mm tt")
+            </p>
+
+            <hr />
+
+            <!-- Education Section -->
+            <h4 class="mt-4 text-success"><i class="bi bi-mortarboard"></i> Education</h4>
+            @if (Model.Educations != null && Model.Educations.Any())
+            {
+                <ul class="list-group mb-4">
+                    @foreach (var edu in Model.Educations)
+                    {
+                        <li class="list-group-item">
+                            <strong>@edu.Degree</strong> in @edu.FieldOfStudy <br />
+                            @edu.Institution <br />
+                            <small class="text-muted">@edu.StartDate.ToString("yyyy") - @edu.EndDate.ToString("yyyy")</small>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p class="text-muted">No education records.</p>
+            }
+
+            <!-- Experience Section -->
+            <h4 class="mt-4 text-info"><i class="bi bi-briefcase"></i> Experience</h4>
+            @if (Model.Experiences != null && Model.Experiences.Any())
+            {
+                <ul class="list-group mb-4">
+                    @foreach (var exp in Model.Experiences)
+                    {
+                        <li class="list-group-item">
+                            <strong>@exp.Position</strong> - @exp.Company <br />
+                            <small class="text-muted">@exp.StartDate.ToString("MMM yyyy") - @exp.EndDate.ToString("MMM yyyy")</small>
+                            <p class="mt-2">@exp.Description</p>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p class="text-muted">No experience records.</p>
+            }
+
+            <!-- Skills Section -->
+            <h4 class="mt-4 text-warning"><i class="bi bi-tools"></i> Skills</h4>
+            @if (Model.Skills != null && Model.Skills.Any())
+            {
+                <ul class="list-inline">
+                    @foreach (var skill in Model.Skills)
+                    {
+                        <li class="list-inline-item mb-2">
+                            <span class="badge bg-secondary">
+                                @skill.SkillName (@skill.Proficiency)
+                            </span>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p class="text-muted">No skills listed.</p>
+            }
+
+            <div class="mt-4">
+                <a asp-action="Edit" asp-route-id="@Model.ResumeId" class="btn btn-warning">
+                    <i class="bi bi-pencil"></i> Edit
+                </a>
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i> Back to List
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

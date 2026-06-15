@@ -1,0 +1,65 @@
+@using Microsoft.AspNetCore.Mvc.Rendering
+@model ResumeBuilderWebApp.Models.User
+
+@{
+    ViewData["Title"] = "Edit User";
+
+    // Create SelectList in Razor code
+    var roles = new List<SelectListItem>
+    {
+        new SelectListItem { Text = "Admin", Value = "Admin" },
+        new SelectListItem { Text = "Graduate", Value = "Graduate" }
+    };
+}
+
+<div class="container mt-4">
+    <div class="card shadow-sm p-4 bg-white rounded">
+        <h2 class="mb-4 text-primary">Edit User</h2>
+        <hr />
+
+        <form asp-action="Edit" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+            <input type="hidden" asp-for="UserId" />
+
+            <div class="form-group mb-3">
+                <label asp-for="FullName" class="form-label"></label>
+                <input asp-for="FullName" class="form-control" placeholder="Enter full name" />
+                <span asp-validation-for="FullName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" class="form-control" placeholder="Enter email address" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Password" class="form-label">New Password</label>
+                <input asp-for="Password" class="form-control" type="password" placeholder="Leave blank to keep current password" />
+                <small class="text-muted">Leave blank to keep current password.</small>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Role" class="form-label"></label>
+                <select asp-for="Role" class="form-control" asp-items="roles">
+                    <option value="">-- Select Role --</option>
+                </select>
+                <span asp-validation-for="Role" class="text-danger"></span>
+            </div>
+
+            <div class="d-flex justify-content-between mt-4">
+                <div>
+                    <button type="submit" class="btn btn-success">Save Changes</button>
+                    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+                </div>
+                <a asp-controller="Home" asp-action="Index" class="btn btn-outline-primary">Back to Home</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

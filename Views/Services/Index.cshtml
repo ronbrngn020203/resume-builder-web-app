@@ -1,0 +1,41 @@
+﻿@using System.Security.Claims
+@{
+    var user = Context.User;
+    var role = user?.FindFirst(ClaimTypes.Role)?.Value ?? "";
+    string dashboardController = role switch
+    {
+        "Admin" => "AdminDashboard",
+        "Graduate" => "GraduateDashboard",
+        _ => "Account"
+    };
+}
+
+@model IEnumerable<ResumeBuilderWebApp.Models.ServiceCategory>
+
+@{
+    ViewData["Title"] = "Browse Services";
+}
+
+<h2 class="text-primary mb-4">Browse Services</h2>
+
+<div class="row">
+    @foreach (var category in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h4 class="card-title">@category.Name</h4>
+                    <p class="card-text text-muted">@category.Description</p>
+                    <a asp-action="Category" asp-route-slug="@category.Slug"
+                       class="btn btn-primary">
+                        View Services
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="mt-3">
+    <a asp-controller="@dashboardController" asp-action="Index">Back to Home</a>
+</div>

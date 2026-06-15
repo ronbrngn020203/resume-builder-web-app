@@ -1,0 +1,38 @@
+﻿@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <h2 class="fw-bold text-primary">Admin Dashboard</h2>
+        <p class="text-muted">Manage users and services across the platform.</p>
+    </div>
+
+    <div class="row justify-content-center">
+        <!-- Manage Services -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm border-0 h-100 text-center">
+                <div class="card-body">
+                    <i class="bi bi-gear-fill text-primary" style="font-size: 2rem;"></i>
+                    <h5 class="mt-3 mb-3">Manage Services</h5>
+                    <a asp-controller="AdminServices" asp-action="Index" class="btn btn-primary w-100">
+                        Go to Services
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Manage Users -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm border-0 h-100 text-center">
+                <div class="card-body">
+                    <i class="bi bi-people-fill text-secondary" style="font-size: 2rem;"></i>
+                    <h5 class="mt-3 mb-3">Manage Users</h5>
+                    <a asp-controller="Users" asp-action="Index" class="btn btn-secondary w-100">
+                        Go to Users
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

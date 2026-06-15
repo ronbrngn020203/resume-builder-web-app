@@ -1,0 +1,30 @@
+﻿@{
+    ViewData["Title"] = "Graduate Dashboard";
+}
+
+<div class="container mt-5">
+    <h2 class="text-primary fw-bold mb-4">Welcome, Graduate!</h2>
+    <p class="lead">Access the available services and manage your resumes.</p>
+
+    <div class="row mt-4">
+        <div class="col-md-6 mb-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body text-center">
+                    <h5 class="card-title">📄 My Resumes</h5>
+                    <p class="card-text text-muted">View or edit your saved resumes.</p>
+                    <a asp-controller="Resumes" asp-action="Index" class="btn btn-outline-primary">Go to Resumes</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body text-center">
+                    <h5 class="card-title">🛠 Browse Services</h5>
+                    <p class="card-text text-muted">Explore available career and resume services.</p>
+                    <a asp-controller="Services" asp-action="Index" class="btn btn-outline-success">Browse Services</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

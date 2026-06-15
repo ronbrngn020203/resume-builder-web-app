@@ -1,0 +1,119 @@
+﻿@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Authorization
+@using System.Security.Claims
+
+@{
+    var user = Context.User;
+    var role = user?.FindFirst(ClaimTypes.Role)?.Value;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ResumeBuilder</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <!-- ✅ Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            @{
+                var userRole = role ?? "";
+                string dashboardController = userRole switch
+                {
+                    "Admin" => "AdminDashboard",
+                    "Staff" => "StaffDashboard",
+                    "Graduate" => "GraduateDashboard",
+                    _ => "Account" // fallback to login if not signed in
+                };
+            }
+            <a class="navbar-brand" asp-controller="@dashboardController" asp-action="Index">ResumeBuilder</a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    @if (user.Identity?.IsAuthenticated ?? false)
+                    {
+                        if (role == "Admin")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="AdminDashboard" asp-action="Index">Dashboard</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Users" asp-action="Index">Manage Users</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Services" asp-action="Index">Manage Services</a>
+                            </li>
+                        }
+                        else if (role == "Graduate")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="GraduateDashboard" asp-action="Index">Dashboard</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Resumes" asp-action="Index">My Resumes</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Services" asp-action="Index">Browse Services</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Cart" asp-action="Index">
+                                    <i class="bi bi-cart"></i> My Cart
+                                </a>
+                            </li>
+
+                        }
+                    }
+                </ul>
+
+                <ul class="navbar-nav">
+                    @if (user.Identity?.IsAuthenticated ?? false)
+                    {
+                        <li class="nav-item text-light me-3 mt-2">
+                            Hello, <strong>@user.Identity.Name</strong> (@role)
+                        </li>
+                        <li class="nav-item">
+                            <form asp-controller="Account" asp-action="Logout" method="post">
+                                <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
+                            </form>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Account" asp-action="Login">Login</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main content placeholder -->
+    <div class="container mt-4">
+        @RenderBody()
+    </div>
+
+    <!-- Optional section placeholder for scripts -->
+    @RenderSection("Scripts", required: false)
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- ✅ Footer -->
+    <footer class="bg-dark text-white text-center py-3 mt-5">
+        <div class="container">
+            <p class="mb-0">
+                © @DateTime.Now.Year ResumeBuilder. All rights reserved. |
+                <a href="mailto:support@resumebuilder.com" class="text-white text-decoration-underline">Contact Support</a>
+            </p>
+        </div>
+    </footer>
+</body>
+</html>

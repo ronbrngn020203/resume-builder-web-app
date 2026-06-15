@@ -1,0 +1,29 @@
+﻿@model ResumeBuilderWebApp.Models.ServiceCategory
+
+<h2>@Model.Name</h2>
+<p class="text-muted">@Model.Description</p>
+<hr />
+
+<div class="row">
+    @foreach (var s in Model.Services)
+    {
+        <div class="col-md-4 mb-3">
+            <div class="card h-100 shadow-sm">
+                <img src="@s.ThumbnailPath" class="card-img-top" alt="@s.Title" />
+                <div class="card-body">
+                    <h5>@s.Title</h5>
+                    <p>@s.ShortDescription</p>
+                    <p><strong>@s.Price.ToString("C")</strong></p>
+                    <a class="btn btn-outline-primary btn-sm"
+                       href="@Url.Action("Details", "Services", new { id = s.ServiceId })">
+                        Details
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<a href="@Url.Action("Index", "Services")" class="btn btn-link mt-3">
+    ← Back to Categories
+</a>

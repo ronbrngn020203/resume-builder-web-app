@@ -1,0 +1,75 @@
+﻿@model ResumeBuilderWebApp.Models.Resume
+
+<div class="container mt-5">
+    <div class="card shadow-lg">
+        <div class="card-body">
+            <h2 class="text-primary">@Model.FullName</h2>
+            <p><strong>Email:</strong> @Model.Email</p>
+            <p><strong>Phone:</strong> @Model.Phone</p>
+
+            <hr />
+            <h4>Summary</h4>
+            <p>@Model.Summary</p>
+
+            <hr />
+            <h4>Education</h4>
+            @if (Model.Educations != null && Model.Educations.Any())
+            {
+                <ul>
+                    @foreach (var edu in Model.Educations)
+                    {
+                        <li>
+                            <strong>@edu.Degree</strong> in @edu.FieldOfStudy — @edu.Institution
+                            <br />
+                            <small>@edu.StartDate.ToString("MMM yyyy") - @edu.EndDate.ToString("MMM yyyy")</small>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p class="text-muted">No education details added yet.</p>
+            }
+
+            <hr />
+            <h4>Experience</h4>
+            @if (Model.Experiences != null && Model.Experiences.Any())
+            {
+                <ul>
+                    @foreach (var exp in Model.Experiences)
+                    {
+                        <li>
+                            <strong>@exp.Position</strong> at @exp.Company
+                            <br />
+                            <small>@exp.StartDate.ToString("MMM yyyy") - @exp.EndDate.ToString("MMM yyyy")</small>
+                            <br />
+                            @exp.Description
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p class="text-muted">No work experience added yet.</p>
+            }
+
+            <hr />
+            <h4>Skills</h4>
+            @if (Model.Skills != null && Model.Skills.Any())
+            {
+                <ul>
+                    @foreach (var skill in Model.Skills)
+                    {
+                        <li>@skill.SkillName (@skill.Proficiency)</li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p class="text-muted">No skills added yet.</p>
+            }
+
+            <a asp-action="Index" class="btn btn-secondary mt-3">Back to List</a>
+        </div>
+    </div>
+</div>

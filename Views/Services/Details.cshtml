@@ -1,0 +1,62 @@
+﻿@using System.Security.Claims
+@{
+    var user = Context.User;
+    var role = user?.FindFirst(ClaimTypes.Role)?.Value ?? "";
+    string dashboardController = role switch
+    {
+        "Admin" => "AdminDashboard",
+        "Graduate" => "GraduateDashboard",
+        _ => "Account"
+    };
+}
+
+@model ResumeBuilderWebApp.Models.Service
+@{
+    ViewData["Title"] = @Model.Title;
+}
+
+<div class="container py-5">
+    <div class="row align-items-center">
+        <div class="col-md-5 text-center">
+            <img src="@Model.ThumbnailPath" alt="@Model.Title" class="img-fluid rounded shadow-sm" style="max-height:300px; object-fit:cover;" />
+        </div>
+
+        <div class="col-md-7">
+            <h1 class="fw-bold text-primary mb-3">@Model.Title</h1>
+            @if (TempData["Message"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+                    @TempData["Message"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+            <p class="lead text-muted">@Model.ShortDescription</p>
+            <hr />
+            <p>@Model.FullDescription</p>
+
+            <div class="mt-4">
+                <h4 class="text-success">Price: <strong>$@Model.Price</strong></h4>
+                <p class="text-muted">Estimated completion time: @Model.DurationMinutes minutes</p>
+            </div>
+
+            @if (Model.Title.Trim().Equals("Build Your Resume", StringComparison.OrdinalIgnoreCase))
+            {
+                <a asp-controller="Resumes" asp-action="Create" class="btn btn-primary mt-3">
+                    Start Building Your Resume
+                </a>
+            }
+            else
+            {
+                <a asp-controller="Services" asp-action="AddToCart" asp-route-id="@Model.ServiceId" class="btn btn-success mt-3">
+                    Add to Cart
+                </a>
+            }
+
+            <div class="mt-4">
+                <a href="@Url.Action("Category","Services", new { slug = Model.Category.Slug })"
+                   class="btn btn-outline-secondary">← Back to @Model.Category.Name</a>
+                <a asp-controller="@dashboardController" asp-action="Index" class="btn btn-secondary">Back to Dashboard</a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,204 @@
+@model ResumeBuilderWebApp.Models.Resume
+
+@{
+    ViewData["Title"] = "Edit Resume";
+}
+
+<h2 class="mb-4">Edit Resume</h2>
+
+<div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+<form asp-action="Edit" method="post" autocomplete="off">
+    <input type="hidden" asp-for="ResumeId" />
+
+    <div class="mb-3">
+        <label asp-for="Title" class="form-label"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="FullName" class="form-label"></label>
+        <input asp-for="FullName" class="form-control" />
+        <span asp-validation-for="FullName" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Phone" class="form-label"></label>
+        <input asp-for="Phone" class="form-control" />
+        <span asp-validation-for="Phone" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Summary" class="form-label"></label>
+        <textarea asp-for="Summary" class="form-control"></textarea>
+        <span asp-validation-for="Summary" class="text-danger"></span>
+    </div>
+
+    <hr />
+    <h4>Education</h4>
+    <div id="education-list">
+        @if (Model.Educations != null)
+        {
+            for (int i = 0; i < Model.Educations.Count; i++)
+            {
+                <div class="education-item mb-3 border p-3 rounded">
+                    <input type="hidden" name="Educations[@i].EducationId" value="@Model.Educations[i].EducationId" />
+                    <label>Institution</label>
+                    <input name="Educations[@i].Institution" value="@Model.Educations[i].Institution" class="form-control mb-2" />
+                    <label>Degree</label>
+                    <input name="Educations[@i].Degree" value="@Model.Educations[i].Degree" class="form-control mb-2" />
+                    <label>Field of Study</label>
+                    <input name="Educations[@i].FieldOfStudy" value="@Model.Educations[i].FieldOfStudy" class="form-control mb-2" />
+                    <label>Start Date</label>
+                    <input type="date" name="Educations[@i].StartDate" value="@(Model.Educations[i].StartDate == DateTime.MinValue ? "" : Model.Educations[i].StartDate.ToString("yyyy-MM-dd"))" class="form-control mb-2" />
+                    <label>End Date</label>
+                    <input type="date" name="Educations[@i].EndDate" value="@(Model.Educations[i].EndDate == DateTime.MinValue ? "" : Model.Educations[i].EndDate.ToString("yyyy-MM-dd"))" class="form-control mb-2" />
+                    <button type="button" class="btn btn-danger btn-sm" onclick="removeItem(this)">Remove</button>
+                </div>
+            }
+        }
+    </div>
+    <button type="button" class="btn btn-outline-primary mb-3" onclick="addEducation()">+ Add Education</button>
+
+    <hr />
+    <h4>Experience</h4>
+    <div id="experience-list">
+        @if (Model.Experiences != null)
+        {
+            for (int i = 0; i < Model.Experiences.Count; i++)
+            {
+                <div class="experience-item mb-3 border p-3 rounded">
+                    <input type="hidden" name="Experiences[@i].ExperienceId" value="@Model.Experiences[i].ExperienceId" />
+                    <label>Company</label>
+                    <input name="Experiences[@i].Company" value="@Model.Experiences[i].Company" class="form-control mb-2" />
+                    <label>Position</label>
+                    <input name="Experiences[@i].Position" value="@Model.Experiences[i].Position" class="form-control mb-2" />
+                    <label>Description</label>
+                    <textarea name="Experiences[@i].Description" class="form-control mb-2">@Model.Experiences[i].Description</textarea>
+                    <label>Start Date</label>
+                    <input type="date" name="Experiences[@i].StartDate" value="@(Model.Experiences[i].StartDate == DateTime.MinValue ? "" : Model.Experiences[i].StartDate.ToString("yyyy-MM-dd"))" class="form-control mb-2" />
+                    <label>End Date</label>
+                    <input type="date" name="Experiences[@i].EndDate" value="@(Model.Experiences[i].EndDate == DateTime.MinValue ? "" : Model.Experiences[i].EndDate.ToString("yyyy-MM-dd"))" class="form-control mb-2" />
+                    <button type="button" class="btn btn-danger btn-sm" onclick="removeItem(this)">Remove</button>
+                </div>
+            }
+        }
+    </div>
+    <button type="button" class="btn btn-outline-primary mb-3" onclick="addExperience()">+ Add Experience</button>
+
+    <hr />
+    <h4>Skills</h4>
+    <div id="skill-list">
+        @if (Model.Skills != null)
+        {
+            for (int i = 0; i < Model.Skills.Count; i++)
+            {
+                <div class="skill-item mb-3 border p-3 rounded">
+                    <input type="hidden" name="Skills[@i].SkillId" value="@Model.Skills[i].SkillId" />
+                    <label>Skill</label>
+                    <input name="Skills[@i].SkillName" value="@Model.Skills[i].SkillName" class="form-control mb-2" />
+                    <label>Proficiency</label>
+                    <select name="Skills[@i].Proficiency" class="form-select mb-2" required>
+                        <option value="">-- Select Level --</option>
+                        <option value="Beginner" selected="@(Model.Skills[i].Proficiency == "Beginner")">Beginner</option>
+                        <option value="Intermediate" selected="@(Model.Skills[i].Proficiency == "Intermediate")">Intermediate</option>
+                        <option value="Expert" selected="@(Model.Skills[i].Proficiency == "Expert")">Expert</option>
+                    </select>
+                    <button type="button" class="btn btn-danger btn-sm" onclick="removeItem(this)">Remove</button>
+                </div>
+            }
+        }
+    </div>
+    <button type="button" class="btn btn-outline-primary mb-3" onclick="addSkill()">+ Add Skill</button>
+
+    <hr />
+    <button type="submit" class="btn btn-success">Save Changes</button>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</form>
+
+@section Scripts {
+    <script>
+        function removeItem(button) {
+            button.closest('.education-item, .experience-item, .skill-item').remove();
+            reindexFields();
+        }
+
+        function addEducation() {
+            const container = document.getElementById('education-list');
+            const index = container.querySelectorAll('.education-item').length;
+            const html = `
+                        <div class="education-item mb-3 border p-3 rounded">
+                            <label>Institution</label>
+                            <input name="Educations[${index}].Institution" class="form-control mb-2" />
+                            <label>Degree</label>
+                            <input name="Educations[${index}].Degree" class="form-control mb-2" />
+                            <label>Field of Study</label>
+                            <input name="Educations[${index}].FieldOfStudy" class="form-control mb-2" />
+                            <label>Start Date</label>
+                            <input type="date" name="Educations[${index}].StartDate" class="form-control mb-2" />
+                            <label>End Date</label>
+                            <input type="date" name="Educations[${index}].EndDate" class="form-control mb-2" />
+                            <button type="button" class="btn btn-danger btn-sm" onclick="removeItem(this)">Remove</button>
+                        </div>`;
+            container.insertAdjacentHTML('beforeend', html);
+        }
+
+        function addExperience() {
+            const container = document.getElementById('experience-list');
+            const index = container.querySelectorAll('.experience-item').length;
+            const html = `
+                        <div class="experience-item mb-3 border p-3 rounded">
+                            <label>Company</label>
+                            <input name="Experiences[${index}].Company" class="form-control mb-2" />
+                            <label>Position</label>
+                            <input name="Experiences[${index}].Position" class="form-control mb-2" />
+                            <label>Description</label>
+                            <textarea name="Experiences[${index}].Description" class="form-control mb-2"></textarea>
+                            <label>Start Date</label>
+                            <input type="date" name="Experiences[${index}].StartDate" class="form-control mb-2" />
+                            <label>End Date</label>
+                            <input type="date" name="Experiences[${index}].EndDate" class="form-control mb-2" />
+                            <button type="button" class="btn btn-danger btn-sm" onclick="removeItem(this)">Remove</button>
+                        </div>`;
+            container.insertAdjacentHTML('beforeend', html);
+        }
+
+        function addSkill() {
+            const container = document.getElementById('skill-list');
+            const index = container.querySelectorAll('.skill-item').length;
+            const html = `
+                        <div class="skill-item mb-3 border p-3 rounded">
+                            <label>Skill</label>
+                            <input name="Skills[${index}].SkillName" class="form-control mb-2" />
+                            <label>Proficiency</label>
+                            <input name="Skills[${index}].Proficiency" class="form-control mb-2" />
+                            <button type="button" class="btn btn-danger btn-sm" onclick="removeItem(this)">Remove</button>
+                        </div>`;
+            container.insertAdjacentHTML('beforeend', html);
+        }
+
+        function reindexFields() {
+            const sections = [
+                { selector: '.education-item', prefix: 'Educations' },
+                { selector: '.experience-item', prefix: 'Experiences' },
+                { selector: '.skill-item', prefix: 'Skills' }
+            ];
+
+            sections.forEach(s => {
+                document.querySelectorAll(s.selector).forEach((item, i) => {
+                    item.querySelectorAll('input, textarea').forEach(input => {
+                        const name = input.name.replace(/\[.*?\]/, `[${i}]`);
+                        input.name = name;
+                    });
+                });
+            });
+        }
+    </script>
+}
