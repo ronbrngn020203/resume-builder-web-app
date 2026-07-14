@@ -60,7 +60,8 @@ namespace ResumeBuilderWebApp.Controllers
         }
 
         // POST: /Services/AddToCart/5
-        [HttpGet]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult AddToCart(int id)
         {
             var service = _db.Services.FirstOrDefault(s => s.ServiceId == id);

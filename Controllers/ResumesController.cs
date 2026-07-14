@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -23,10 +24,17 @@ namespace ResumeBuilderWebApp.Controllers
             _logger = logger;
         }
 
+        // The resume "owner" is matched by email (same convention GraduateDashboardController uses),
+        // since Resume doesn't carry a UserId foreign key.
+        private string CurrentUserEmail => User.FindFirstValue(ClaimTypes.Email);
+
         // GET: Resumes
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Resumes.ToListAsync());
+            var resumes = await _context.Resumes
+                .Where(r => r.Email == CurrentUserEmail)
+                .ToListAsync();
+            return View(resumes);
         }
 
         // GET: Resumes/Details/5
@@ -38,7 +46,7 @@ namespace ResumeBuilderWebApp.Controllers
             }
 
             var resume = await _context.Resumes
-                .FirstOrDefaultAsync(m => m.ResumeId == id);
+                .FirstOrDefaultAsync(m => m.ResumeId == id && m.Email == CurrentUserEmail);
             if (resume == null)
             {
                 return NotFound();
@@ -62,14 +70,14 @@ namespace ResumeBuilderWebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Resume resume)
         {
-            Console.WriteLine("?? Received Create request");
+            _logger.LogInformation("Received Create request for resume {Title}", resume.Title);
 
             if (resume.Educations != null)
-                Console.WriteLine($"Educations count: {resume.Educations.Count}");
+                _logger.LogDebug("Educations count: {Count}", resume.Educations.Count);
             if (resume.Experiences != null)
-                Console.WriteLine($"Experiences count: {resume.Experiences.Count}");
+                _logger.LogDebug("Experiences count: {Count}", resume.Experiences.Count);
             if (resume.Skills != null)
-                Console.WriteLine($"Skills count: {resume.Skills.Count}");
+                _logger.LogDebug("Skills count: {Count}", resume.Skills.Count);
 
             if (ModelState.IsValid)
             {
@@ -86,16 +94,16 @@ namespace ResumeBuilderWebApp.Controllers
                 _context.Resumes.Add(resume);
                 await _context.SaveChangesAsync();
 
-                Console.WriteLine("? Resume saved successfully!");
+                _logger.LogInformation("Resume {ResumeId} saved successfully", resume.ResumeId);
                 return RedirectToAction("Preview", new { id = resume.ResumeId });
             }
 
-            Console.WriteLine("? ModelState invalid.");
+            _logger.LogWarning("Resume create failed model validation");
             foreach (var error in ModelState)
             {
                 foreach (var subError in error.Value.Errors)
                 {
-                    Console.WriteLine($"? ModelState Error: {error.Key} - {subError.ErrorMessage}");
+                    _logger.LogWarning("ModelState error on {Field}: {Message}", error.Key, subError.ErrorMessage);
                 }
             }
 
@@ -119,7 +127,7 @@ namespace ResumeBuilderWebApp.Controllers
                 .Include(r => r.Educations)
                 .Include(r => r.Experiences)
                 .Include(r => r.Skills)
-                .FirstOrDefaultAsync(r => r.ResumeId == id);
+                .FirstOrDefaultAsync(r => r.ResumeId == id && r.Email == CurrentUserEmail);
 
             if (resume == null)
             {
@@ -135,6 +143,14 @@ namespace ResumeBuilderWebApp.Controllers
         public async Task<IActionResult> Edit(int id, Resume resume)
         {
             if (id != resume.ResumeId)
+            {
+                return NotFound();
+            }
+
+            // Confirm this resume actually belongs to the signed-in user before saving changes
+            var ownsResume = await _context.Resumes
+                .AnyAsync(r => r.ResumeId == id && r.Email == CurrentUserEmail);
+            if (!ownsResume)
             {
                 return NotFound();
             }
@@ -164,7 +180,7 @@ namespace ResumeBuilderWebApp.Controllers
                 .Include(r => r.Educations)
                 .Include(r => r.Experiences)
                 .Include(r => r.Skills)
-                .FirstOrDefaultAsync(r => r.ResumeId == id);
+                .FirstOrDefaultAsync(r => r.ResumeId == id && r.Email == CurrentUserEmail);
 
             if (resume == null)
             {
@@ -183,7 +199,7 @@ namespace ResumeBuilderWebApp.Controllers
             }
 
             var resume = await _context.Resumes
-                .FirstOrDefaultAsync(m => m.ResumeId == id);
+                .FirstOrDefaultAsync(m => m.ResumeId == id && m.Email == CurrentUserEmail);
             if (resume == null)
             {
                 return NotFound();
@@ -197,13 +213,14 @@ namespace ResumeBuilderWebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var resume = await _context.Resumes.FindAsync(id);
+            var resume = await _context.Resumes
+                .FirstOrDefaultAsync(r => r.ResumeId == id && r.Email == CurrentUserEmail);
             if (resume != null)
             {
                 _context.Resumes.Remove(resume);
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

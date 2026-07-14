@@ -1,20 +1,55 @@
-﻿@{
+﻿@using System.Security.Claims
+@{
     ViewData["Title"] = "Home";
+    var isAuthenticated = Context.User.Identity?.IsAuthenticated ?? false;
+    var role = Context.User?.FindFirst(ClaimTypes.Role)?.Value ?? "";
+    string ctaController = role switch
+    {
+        "Admin" => "AdminDashboard",
+        "Graduate" => "GraduateDashboard",
+        _ => "Account"
+    };
+    string ctaAction = isAuthenticated ? "Index" : "Login";
+    string ctaLabel = isAuthenticated ? "Go to my dashboard" : "Get started — it's free";
 }
 
-<div class="text-center py-5 bg-light rounded shadow-sm">
-    <h1 class="display-4 text-primary fw-bold">Welcome to Resume Builder</h1>
-    <p class="lead mb-5">Create, manage, and perfect your professional resume with ease.</p>
-
-    <div class="d-flex justify-content-center gap-3">
-        <a asp-controller="Services" asp-action="Index" class="btn btn-primary btn-lg">
-            Browse Services
-        </a>
-        <a asp-controller="AdminServices" asp-action="Index" class="btn btn-outline-primary btn-lg">
-            Manage Services
-        </a>
-        <a asp-controller="Users" asp-action="Index" class="btn btn-outline-dark btn-lg">
-            Manage Users
-        </a>
+<div class="rb-hero">
+    <div class="row align-items-center g-5">
+        <div class="col-lg-7">
+            <span class="rb-hero-eyebrow">● Built for job-seeking graduates</span>
+            <h1>Turn your coursework into a resume that gets you hired.</h1>
+            <p class="lead mb-4">
+                Build a clean, professional resume in minutes, then book career services
+                to help you land your first role.
+            </p>
+            <div class="d-flex gap-3 flex-wrap">
+                <a asp-controller="@ctaController" asp-action="@ctaAction" class="btn btn-accent btn-lg">
+                    @ctaLabel
+                </a>
+                <a asp-controller="Services" asp-action="Index" class="btn btn-outline-light btn-lg">
+                    Browse services
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-5 d-none d-lg-block">
+            <div class="rb-card-stack">
+                <div class="rb-card">
+                    <div class="rb-line accent"></div>
+                    <div class="rb-line"></div>
+                    <div class="rb-line short"></div>
+                </div>
+                <div class="rb-card">
+                    <div class="rb-line accent"></div>
+                    <div class="rb-line"></div>
+                    <div class="rb-line short"></div>
+                </div>
+                <div class="rb-card">
+                    <div class="rb-line accent"></div>
+                    <div class="rb-line"></div>
+                    <div class="rb-line"></div>
+                    <div class="rb-line short"></div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

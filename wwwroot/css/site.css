@@ -1,77 +1,412 @@
-html {
-  font-size: 14px;
+/* ============================================================
+   ResumeBuilder design tokens
+   ============================================================ */
+:root {
+    --ink: #12142b;
+    --indigo: #4f46e5;
+    --indigo-dark: #3c34c9;
+    --coral: #ff6b4a;
+    --coral-dark: #e6542f;
+    --mist: #f4f5fc;
+    --surface: #ffffff;
+    --slate: #6b6e85;
+    --border: #e3e4f0;
+    --success: #1f9d63;
+    --danger: #e5484d;
+    --font-display: 'Space Grotesk', 'Segoe UI', sans-serif;
+    --font-body: 'Inter', 'Segoe UI', sans-serif;
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 22px;
 }
 
-@media (min-width: 768px) {
-  html {
+html {
     font-size: 16px;
-  }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
-}
-
-/* General typography and background */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f7f9fb;
-    color: #333;
+    font-family: var(--font-body);
+    background-color: var(--mist);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
 }
 
-/* Header */
-header {
-    background: linear-gradient(90deg, #007bff 0%, #0056b3 100%);
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    color: var(--ink);
+    font-weight: 600;
+    letter-spacing: -0.01em;
 }
 
-/* Footer */
-footer {
-    background: #222;
-    color: #ddd;
-    box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+a {
+    color: var(--indigo);
 }
 
-/* Buttons */
-.btn-primary {
-    background-color: #007bff;
-    border-color: #007bff;
-}
-
-    .btn-primary:hover {
-        background-color: #0056b3;
-        border-color: #00448f;
+    a:hover {
+        color: var(--indigo-dark);
     }
 
-/* Cards for Services */
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus,
+.form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.15rem var(--surface), 0 0 0 0.3rem rgba(79, 70, 229, 0.45);
+}
+
+/* ============================================================
+   Navbar
+   ============================================================ */
+.rb-navbar {
+    background: var(--ink);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.rb-brand {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: #fff !important;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.rb-brand-mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--indigo) 0%, var(--coral) 130%);
+    font-size: 0.95rem;
+    color: #fff;
+}
+
+.rb-navbar .nav-link {
+    color: rgba(255, 255, 255, 0.78) !important;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+    .rb-navbar .nav-link:hover {
+        color: #fff !important;
+    }
+
+    .rb-navbar .nav-link svg {
+        width: 16px;
+        height: 16px;
+    }
+
+/* ============================================================
+   Buttons
+   ============================================================ */
+.btn {
+    font-weight: 600;
+    border-radius: var(--radius-sm);
+    padding: 0.55rem 1.15rem;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+.btn-primary {
+    background-color: var(--indigo);
+    border-color: var(--indigo);
+}
+
+    .btn-primary:hover, .btn-primary:focus {
+        background-color: var(--indigo-dark);
+        border-color: var(--indigo-dark);
+        transform: translateY(-1px);
+    }
+
+.btn-outline-primary {
+    color: var(--indigo);
+    border-color: var(--indigo);
+}
+
+    .btn-outline-primary:hover {
+        background-color: var(--indigo);
+        border-color: var(--indigo);
+        transform: translateY(-1px);
+    }
+
+/* Reserved for the single primary action on a page */
+.btn-accent {
+    background-color: var(--coral);
+    border-color: var(--coral);
+    color: #fff;
+}
+
+    .btn-accent:hover {
+        background-color: var(--coral-dark);
+        border-color: var(--coral-dark);
+        color: #fff;
+        transform: translateY(-1px);
+    }
+
+/* ============================================================
+   Cards
+   ============================================================ */
 .card {
-    border-radius: 12px;
-    overflow: hidden;
-    transition: transform 0.2s, box-shadow 0.2s;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    box-shadow: none;
+    transition: transform 0.18s ease, border-color 0.18s ease;
 }
 
     .card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+        transform: translateY(-3px);
+        border-color: var(--indigo);
     }
 
-/* Tables */
+.card-title {
+    font-family: var(--font-display);
+}
+
+/* ============================================================
+   Tables
+   ============================================================ */
 .table {
-    background-color: #fff;
+    background-color: var(--surface);
+    border-radius: var(--radius-md);
+    overflow: hidden;
 }
 
     .table th {
-        background-color: #0056b3;
-        color: white;
+        background-color: var(--ink);
+        color: #fff;
+        font-family: var(--font-display);
+        font-weight: 500;
+        border: none;
     }
 
-/* Page titles */
-h1, h2, h3 {
-    color: #0056b3;
+/* ============================================================
+   Forms
+   ============================================================ */
+.form-control, .form-select {
+    border-radius: var(--radius-sm);
+    border-color: var(--border);
+    padding: 0.55rem 0.85rem;
+}
+
+    .form-control:focus, .form-select:focus {
+        border-color: var(--indigo);
+    }
+
+.form-label {
     font-weight: 600;
+    color: var(--ink);
+    font-size: 0.92rem;
+}
+
+/* ============================================================
+   Auth card (login)
+   ============================================================ */
+.rb-auth-wrap {
+    min-height: 75vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.rb-auth-card {
+    width: 100%;
+    max-width: 400px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 2.25rem;
+    box-shadow: 0 20px 40px -24px rgba(18, 20, 43, 0.25);
+}
+
+/* ============================================================
+   Homepage hero + signature resume-stack motif
+   ============================================================ */
+.rb-hero {
+    background: var(--ink);
+    border-radius: var(--radius-lg);
+    padding: 4rem 2.5rem;
+    color: #fff;
+    overflow: hidden;
+    position: relative;
+}
+
+.rb-hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--coral);
+    margin-bottom: 1rem;
+}
+
+.rb-hero h1 {
+    color: #fff;
+    font-size: clamp(2rem, 4vw, 3.1rem);
+    max-width: 20ch;
+}
+
+.rb-hero p.lead {
+    color: rgba(255, 255, 255, 0.75);
+    max-width: 46ch;
+    font-family: var(--font-body);
+}
+
+/* Fanned resume-card stack, built from divs only */
+.rb-card-stack {
+    position: relative;
+    width: 220px;
+    height: 260px;
+    margin: 0 auto;
+}
+
+    .rb-card-stack .rb-card {
+        position: absolute;
+        inset: 0;
+        background: var(--surface);
+        border-radius: var(--radius-md);
+        box-shadow: 0 18px 34px -14px rgba(0, 0, 0, 0.45);
+        padding: 1.1rem;
+    }
+
+        .rb-card-stack .rb-card:nth-child(1) {
+            transform: rotate(-9deg) translate(-14px, 6px);
+            background: var(--mist);
+        }
+
+        .rb-card-stack .rb-card:nth-child(2) {
+            transform: rotate(6deg) translate(10px, 2px);
+            background: #fff;
+        }
+
+        .rb-card-stack .rb-card:nth-child(3) {
+            transform: rotate(-1deg);
+            background: #fff;
+        }
+
+        .rb-card-stack .rb-card .rb-line {
+            height: 8px;
+            border-radius: 4px;
+            background: var(--border);
+            margin-bottom: 8px;
+        }
+
+            .rb-card-stack .rb-card .rb-line.short {
+                width: 55%;
+            }
+
+            .rb-card-stack .rb-card .rb-line.accent {
+                background: var(--indigo);
+                width: 35%;
+            }
+
+/* ============================================================
+   Footer
+   ============================================================ */
+footer.rb-footer {
+    background: var(--ink);
+    color: rgba(255, 255, 255, 0.7);
+}
+
+    footer.rb-footer a {
+        color: #fff;
+    }
+
+/* ============================================================
+   Page headers (dashboards, list pages)
+   ============================================================ */
+.rb-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--coral);
+    margin-bottom: 0.5rem;
+}
+
+.rb-page-header {
+    margin-bottom: 2rem;
+}
+
+    .rb-page-header p.lead {
+        color: var(--slate);
+        font-family: var(--font-body);
+    }
+
+/* ============================================================
+   Stat cards
+   ============================================================ */
+.rb-stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.25rem 1.5rem;
+}
+
+    .rb-stat-card .rb-stat-value {
+        font-family: var(--font-display);
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--ink);
+        line-height: 1.1;
+    }
+
+    .rb-stat-card .rb-stat-label {
+        color: var(--slate);
+        font-size: 0.82rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        margin-top: 0.35rem;
+    }
+
+/* ============================================================
+   Icon tiles (replace icon-font / emoji usage)
+   ============================================================ */
+.rb-icon-tile {
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.75rem;
+}
+
+    .rb-icon-tile svg {
+        width: 22px;
+        height: 22px;
+    }
+
+    .rb-icon-tile.indigo {
+        background: rgba(79, 70, 229, 0.12);
+        color: var(--indigo);
+    }
+
+    .rb-icon-tile.coral {
+        background: rgba(255, 107, 74, 0.14);
+        color: var(--coral);
+    }
+
+    .rb-icon-tile.slate {
+        background: rgba(107, 110, 133, 0.12);
+        color: var(--slate);
+    }
+
+/* ============================================================
+   Empty states
+   ============================================================ */
+.rb-empty-state {
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-md);
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+    color: var(--slate);
+    background: var(--surface);
 }

@@ -14,10 +14,12 @@ namespace ResumeBuilderWebApp.Controllers
     public class AdminServicesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly ILogger<AdminServicesController> _logger;
 
-        public AdminServicesController(ApplicationDbContext context)
+        public AdminServicesController(ApplicationDbContext context, ILogger<AdminServicesController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         // GET: AdminServices
@@ -60,12 +62,11 @@ namespace ResumeBuilderWebApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                // 👇 this shows what’s wrong
                 foreach (var kvp in ModelState)
                 {
                     foreach (var error in kvp.Value.Errors)
                     {
-                        Console.WriteLine($"Field: {kvp.Key} - Error: {error.ErrorMessage}");
+                        _logger.LogWarning("Field: {Field} - Error: {Message}", kvp.Key, error.ErrorMessage);
                     }
                 }
 

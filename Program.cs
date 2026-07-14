@@ -1,4 +1,5 @@
-using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ResumeBuilderWebApp.Models;
 
@@ -6,6 +7,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// ✅ Use ASP.NET Core's built-in PasswordHasher (PBKDF2, salted, adaptive work factor)
+builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
 // ? Configure EF Core with Query Splitting to prevent Include() warning
 builder.Services.AddDbContext<ApplicationDbContext>(options =>

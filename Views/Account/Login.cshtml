@@ -2,14 +2,10 @@
     ViewData["Title"] = "Login";
 }
 
-<div class="text-center mb-4">
-    <h2 class="fw-bold text-primary">Welcome to ResumeBuilder</h2>
-    <p class="text-muted">Please log in to continue.</p>
-</div>
-
-<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
-    <div class="card shadow-lg p-4" style="width: 400px;">
-        <h3 class="text-center text-primary mb-3">Login</h3>
+<div class="rb-auth-wrap">
+    <div class="rb-auth-card">
+        <h3 class="mb-1">Welcome back</h3>
+        <p class="text-muted mb-4" style="color: var(--slate) !important;">Log in to continue building your resume.</p>
 
         <form method="post" asp-action="Login">
             <div class="mb-3">
@@ -27,7 +23,7 @@
                 <div class="alert alert-danger">@ViewBag.Error</div>
             }
 
-            <button type="submit" class="btn btn-primary w-100">Login</button>
+            <button type="submit" class="btn btn-primary w-100">Log in</button>
         </form>
     </div>
 </div>

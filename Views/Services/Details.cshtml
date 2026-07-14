@@ -47,9 +47,9 @@
             }
             else
             {
-                <a asp-controller="Services" asp-action="AddToCart" asp-route-id="@Model.ServiceId" class="btn btn-success mt-3">
-                    Add to Cart
-                </a>
+                <form asp-controller="Services" asp-action="AddToCart" asp-route-id="@Model.ServiceId" method="post" class="mt-3">
+                    <button type="submit" class="btn btn-success">Add to Cart</button>
+                </form>
             }
 
             <div class="mt-4">

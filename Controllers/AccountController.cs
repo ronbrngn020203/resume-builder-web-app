@@ -1,23 +1,25 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ResumeBuilderWebApp.Helpers;
 using ResumeBuilderWebApp.Models;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using ResumeBuilderWebApp.Helpers;
 
 namespace ResumeBuilderWebApp.Controllers
 {
     public class AccountController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IPasswordHasher<User> _passwordHasher;
 
-        public AccountController(ApplicationDbContext context)
+        public AccountController(ApplicationDbContext context, IPasswordHasher<User> passwordHasher)
         {
             _context = context;
+            _passwordHasher = passwordHasher;
         }
 
         [HttpGet]
@@ -38,14 +40,19 @@ namespace ResumeBuilderWebApp.Controllers
                 return View();
             }
 
-            // ✅ Check hashed passwords too
-            bool isValidPassword = user.Password == password ||
-                       user.Password == PasswordHelper.HashPassword(password);
+            var verification = _passwordHasher.VerifyHashedPassword(user, user.Password, password);
 
-            if (!isValidPassword)
+            if (verification == PasswordVerificationResult.Failed)
             {
                 ViewBag.Error = "Invalid email or password.";
                 return View();
+            }
+
+            // Transparently re-hash if PasswordHasher decides the stored hash uses an outdated work factor
+            if (verification == PasswordVerificationResult.SuccessRehashNeeded)
+            {
+                user.Password = _passwordHasher.HashPassword(user, password);
+                await _context.SaveChangesAsync();
             }
 
             var claims = new List<Claim>

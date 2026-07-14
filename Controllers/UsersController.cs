@@ -1,23 +1,27 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ResumeBuilderWebApp.Models;
-using ResumeBuilderWebApp.Helpers;
 
 namespace ResumeBuilderWebApp.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class UsersController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IPasswordHasher<User> _passwordHasher;
+        private readonly ILogger<UsersController> _logger;
 
-        public UsersController(ApplicationDbContext context)
+        public UsersController(ApplicationDbContext context, IPasswordHasher<User> passwordHasher, ILogger<UsersController> logger)
         {
             _context = context;
+            _passwordHasher = passwordHasher;
+            _logger = logger;
         }
 
         // GET: Users
@@ -52,11 +56,7 @@ namespace ResumeBuilderWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                // ? Only hash if not already hashed
-                if (!user.Password.StartsWith("e") || user.Password.Length < 60)
-                {
-                    user.Password = HashPassword(user.Password);
-                }
+                user.Password = _passwordHasher.HashPassword(user, user.Password);
 
                 // ? Ensure Role is preserved (not auto-switched to Graduate)
                 if (string.IsNullOrEmpty(user.Role))
@@ -103,14 +103,7 @@ namespace ResumeBuilderWebApp.Controllers
                 // ? Only update password if admin typed a new one
                 if (!string.IsNullOrWhiteSpace(user.Password))
                 {
-                    if (user.Password.Length != 64 || !System.Text.RegularExpressions.Regex.IsMatch(user.Password, "^[a-f0-9]+$"))
-                    {
-                        existingUser.Password = PasswordHelper.HashPassword(user.Password);
-                    }
-                    else
-                    {
-                        existingUser.Password = user.Password;
-                    }
+                    existingUser.Password = _passwordHasher.HashPassword(existingUser, user.Password);
                 }
 
                 await _context.SaveChangesAsync();
@@ -119,7 +112,7 @@ namespace ResumeBuilderWebApp.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"? Edit Error: {ex.Message}");
+                _logger.LogError(ex, "Failed to update user {UserId}", id);
                 ModelState.AddModelError("", "Failed to update user. Please try again.");
                 return View(user);
             }
@@ -154,21 +147,6 @@ namespace ResumeBuilderWebApp.Controllers
         private bool UserExists(int id)
         {
             return _context.Users.Any(e => e.UserId == id);
-        }
-
-        // ? Helper method to hash passwords
-        private string HashPassword(string password)
-        {
-            if (string.IsNullOrEmpty(password)) return string.Empty;
-
-            using (var sha256 = SHA256.Create())
-            {
-                var bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-                var builder = new StringBuilder();
-                foreach (var b in bytes)
-                    builder.Append(b.ToString("x2"));
-                return builder.ToString();
-            }
         }
     }
 }

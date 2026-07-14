@@ -2,36 +2,56 @@
     ViewData["Title"] = "Admin Dashboard";
 }
 
-<div class="container mt-5">
-    <div class="text-center mb-4">
-        <h2 class="fw-bold text-primary">Admin Dashboard</h2>
-        <p class="text-muted">Manage users and services across the platform.</p>
-    </div>
+<div class="rb-page-header">
+    <span class="rb-eyebrow">● Admin</span>
+    <h2>Platform overview</h2>
+    <p class="lead mb-0">Manage the people and services on ResumeBuilder.</p>
+</div>
 
-    <div class="row justify-content-center">
-        <!-- Manage Services -->
-        <div class="col-md-4 mb-4">
-            <div class="card shadow-sm border-0 h-100 text-center">
-                <div class="card-body">
-                    <i class="bi bi-gear-fill text-primary" style="font-size: 2rem;"></i>
-                    <h5 class="mt-3 mb-3">Manage Services</h5>
-                    <a asp-controller="AdminServices" asp-action="Index" class="btn btn-primary w-100">
-                        Go to Services
-                    </a>
+<div class="row mb-4 g-3">
+    <div class="col-sm-6 col-lg-4">
+        <div class="rb-stat-card">
+            <div class="rb-stat-value">@ViewBag.TotalUsers</div>
+            <div class="rb-stat-label">Total users</div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-4">
+        <div class="rb-stat-card">
+            <div class="rb-stat-value">@ViewBag.TotalGraduates</div>
+            <div class="rb-stat-label">Graduates</div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Manage Services -->
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="rb-icon-tile indigo">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
                 </div>
+                <h5 class="card-title mb-2">Manage services</h5>
+                <p class="text-muted mb-3" style="color: var(--slate) !important;">Add, edit, or retire the career services graduates can book.</p>
+                <a asp-controller="AdminServices" asp-action="Index" class="btn btn-primary">
+                    Go to services
+                </a>
             </div>
         </div>
+    </div>
 
-        <!-- Manage Users -->
-        <div class="col-md-4 mb-4">
-            <div class="card shadow-sm border-0 h-100 text-center">
-                <div class="card-body">
-                    <i class="bi bi-people-fill text-secondary" style="font-size: 2rem;"></i>
-                    <h5 class="mt-3 mb-3">Manage Users</h5>
-                    <a asp-controller="Users" asp-action="Index" class="btn btn-secondary w-100">
-                        Go to Users
-                    </a>
+    <!-- Manage Users -->
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="rb-icon-tile coral">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
                 </div>
+                <h5 class="card-title mb-2">Manage users</h5>
+                <p class="text-muted mb-3" style="color: var(--slate) !important;">View accounts, adjust roles, or remove access.</p>
+                <a asp-controller="Users" asp-action="Index" class="btn btn-outline-primary">
+                    Go to users
+                </a>
             </div>
         </div>
     </div>
