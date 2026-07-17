@@ -1,130 +1,200 @@
+﻿# Views/Resumes/Edit.cshtml
+
+```html
 @model ResumeBuilderWebApp.Models.Resume
 
 @{
     ViewData["Title"] = "Edit Resume";
 }
 
-<h2 class="mb-4">Edit Resume</h2>
+<div class="rb-page-header">
+    <span class="rb-eyebrow">● Editing</span>
+    <h2>Edit resume</h2>
+    <p class="lead mb-0">Update your details below.</p>
+</div>
 
 <div asp-validation-summary="All" class="text-danger mb-3"></div>
 
 <form asp-action="Edit" method="post" autocomplete="off">
     <input type="hidden" asp-for="ResumeId" />
 
-    <div class="mb-3">
-        <label asp-for="Title" class="form-label"></label>
-        <input asp-for="Title" class="form-control" />
-        <span asp-validation-for="Title" class="text-danger"></span>
+    <div class="rb-section-card">
+        <h4>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            Basic information
+        </h4>
+
+        <div class="mb-3">
+            <label asp-for="Title" class="form-label"></label>
+            <input asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label asp-for="FullName" class="form-label"></label>
+                <input asp-for="FullName" class="form-control" />
+                <span asp-validation-for="FullName" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Phone" class="form-label"></label>
+            <input asp-for="Phone" class="form-control" />
+            <span asp-validation-for="Phone" class="text-danger"></span>
+        </div>
+
+        <div class="mb-0">
+            <label asp-for="Summary" class="form-label"></label>
+            <textarea asp-for="Summary" class="form-control" rows="3"></textarea>
+            <span asp-validation-for="Summary" class="text-danger"></span>
+        </div>
     </div>
 
-    <div class="mb-3">
-        <label asp-for="FullName" class="form-label"></label>
-        <input asp-for="FullName" class="form-control" />
-        <span asp-validation-for="FullName" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Email" class="form-label"></label>
-        <input asp-for="Email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Phone" class="form-label"></label>
-        <input asp-for="Phone" class="form-control" />
-        <span asp-validation-for="Phone" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Summary" class="form-label"></label>
-        <textarea asp-for="Summary" class="form-control"></textarea>
-        <span asp-validation-for="Summary" class="text-danger"></span>
-    </div>
-
-    <hr />
-    <h4>Education</h4>
-    <div id="education-list">
-        @if (Model.Educations != null)
-        {
-            for (int i = 0; i < Model.Educations.Count; i++)
+    <div class="rb-section-card">
+        <h4>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+            Education
+        </h4>
+        <div id="education-list">
+            @if (Model.Educations != null)
             {
-                <div class="education-item mb-3 border p-3 rounded">
-                    <input type="hidden" name="Educations[@i].EducationId" value="@Model.Educations[i].EducationId" />
-                    <label>Institution</label>
-                    <input name="Educations[@i].Institution" value="@Model.Educations[i].Institution" class="form-control mb-2" />
-                    <label>Degree</label>
-                    <input name="Educations[@i].Degree" value="@Model.Educations[i].Degree" class="form-control mb-2" />
-                    <label>Field of Study</label>
-                    <input name="Educations[@i].FieldOfStudy" value="@Model.Educations[i].FieldOfStudy" class="form-control mb-2" />
-                    <label>Start Date</label>
-                    <input type="date" name="Educations[@i].StartDate" value="@(Model.Educations[i].StartDate == DateTime.MinValue ? "" : Model.Educations[i].StartDate.ToString("yyyy-MM-dd"))" class="form-control mb-2" />
-                    <label>End Date</label>
-                    <input type="date" name="Educations[@i].EndDate" value="@(Model.Educations[i].EndDate == DateTime.MinValue ? "" : Model.Educations[i].EndDate.ToString("yyyy-MM-dd"))" class="form-control mb-2" />
-                    <button type="button" class="btn btn-danger btn-sm" onclick="removeItem(this)">Remove</button>
-                </div>
+                for (int i = 0; i < Model.Educations.Count; i++)
+                {
+                    <div class="rb-repeater-item education-item">
+                        <input type="hidden" name="Educations[@i].EducationId" value="@Model.Educations[i].EducationId" />
+                        <button type="button" class="rb-remove-btn" onclick="removeItem(this)" aria-label="Remove education">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path><path d="M10 11v6M14 11v6"></path></svg>
+                        </button>
+                        <div class="row">
+                            <div class="col-md-6 mb-2">
+                                <label class="form-label">Institution</label>
+                                <input name="Educations[@i].Institution" value="@Model.Educations[i].Institution" class="form-control" />
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <label class="form-label">Degree</label>
+                                <input name="Educations[@i].Degree" value="@Model.Educations[i].Degree" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label">Field of study</label>
+                            <input name="Educations[@i].FieldOfStudy" value="@Model.Educations[i].FieldOfStudy" class="form-control" />
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-0">
+                                <label class="form-label">Start date</label>
+                                <input type="date" name="Educations[@i].StartDate" value="@(Model.Educations[i].StartDate == DateTime.MinValue ? "" : Model.Educations[i].StartDate.ToString("yyyy-MM-dd"))" class="form-control" />
+                            </div>
+                            <div class="col-md-6 mb-0">
+                                <label class="form-label">End date</label>
+                                <input type="date" name="Educations[@i].EndDate" value="@(Model.Educations[i].EndDate == DateTime.MinValue ? "" : Model.Educations[i].EndDate.ToString("yyyy-MM-dd"))" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                }
             }
-        }
+        </div>
+        <button type="button" class="rb-add-btn" onclick="addEducation()">+ Add education</button>
     </div>
-    <button type="button" class="btn btn-outline-primary mb-3" onclick="addEducation()">+ Add Education</button>
 
-    <hr />
-    <h4>Experience</h4>
-    <div id="experience-list">
-        @if (Model.Experiences != null)
-        {
-            for (int i = 0; i < Model.Experiences.Count; i++)
+    <div class="rb-section-card">
+        <h4>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+            Experience
+        </h4>
+        <div id="experience-list">
+            @if (Model.Experiences != null)
             {
-                <div class="experience-item mb-3 border p-3 rounded">
-                    <input type="hidden" name="Experiences[@i].ExperienceId" value="@Model.Experiences[i].ExperienceId" />
-                    <label>Company</label>
-                    <input name="Experiences[@i].Company" value="@Model.Experiences[i].Company" class="form-control mb-2" />
-                    <label>Position</label>
-                    <input name="Experiences[@i].Position" value="@Model.Experiences[i].Position" class="form-control mb-2" />
-                    <label>Description</label>
-                    <textarea name="Experiences[@i].Description" class="form-control mb-2">@Model.Experiences[i].Description</textarea>
-                    <label>Start Date</label>
-                    <input type="date" name="Experiences[@i].StartDate" value="@(Model.Experiences[i].StartDate == DateTime.MinValue ? "" : Model.Experiences[i].StartDate.ToString("yyyy-MM-dd"))" class="form-control mb-2" />
-                    <label>End Date</label>
-                    <input type="date" name="Experiences[@i].EndDate" value="@(Model.Experiences[i].EndDate == DateTime.MinValue ? "" : Model.Experiences[i].EndDate.ToString("yyyy-MM-dd"))" class="form-control mb-2" />
-                    <button type="button" class="btn btn-danger btn-sm" onclick="removeItem(this)">Remove</button>
-                </div>
+                for (int i = 0; i < Model.Experiences.Count; i++)
+                {
+                    <div class="rb-repeater-item experience-item">
+                        <input type="hidden" name="Experiences[@i].ExperienceId" value="@Model.Experiences[i].ExperienceId" />
+                        <button type="button" class="rb-remove-btn" onclick="removeItem(this)" aria-label="Remove experience">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path><path d="M10 11v6M14 11v6"></path></svg>
+                        </button>
+                        <div class="row">
+                            <div class="col-md-6 mb-2">
+                                <label class="form-label">Company</label>
+                                <input name="Experiences[@i].Company" value="@Model.Experiences[i].Company" class="form-control" />
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <label class="form-label">Position</label>
+                                <input name="Experiences[@i].Position" value="@Model.Experiences[i].Position" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label">Description</label>
+                            <textarea name="Experiences[@i].Description" class="form-control" rows="2">@Model.Experiences[i].Description</textarea>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-0">
+                                <label class="form-label">Start date</label>
+                                <input type="date" name="Experiences[@i].StartDate" value="@(Model.Experiences[i].StartDate == DateTime.MinValue ? "" : Model.Experiences[i].StartDate.ToString("yyyy-MM-dd"))" class="form-control" />
+                            </div>
+                            <div class="col-md-6 mb-0">
+                                <label class="form-label">End date</label>
+                                <input type="date" name="Experiences[@i].EndDate" value="@(Model.Experiences[i].EndDate == DateTime.MinValue ? "" : Model.Experiences[i].EndDate.ToString("yyyy-MM-dd"))" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                }
             }
-        }
+        </div>
+        <button type="button" class="rb-add-btn" onclick="addExperience()">+ Add experience</button>
     </div>
-    <button type="button" class="btn btn-outline-primary mb-3" onclick="addExperience()">+ Add Experience</button>
 
-    <hr />
-    <h4>Skills</h4>
-    <div id="skill-list">
-        @if (Model.Skills != null)
-        {
-            for (int i = 0; i < Model.Skills.Count; i++)
+    <div class="rb-section-card">
+        <h4>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            Skills
+        </h4>
+        <div id="skill-list">
+            @if (Model.Skills != null)
             {
-                <div class="skill-item mb-3 border p-3 rounded">
-                    <input type="hidden" name="Skills[@i].SkillId" value="@Model.Skills[i].SkillId" />
-                    <label>Skill</label>
-                    <input name="Skills[@i].SkillName" value="@Model.Skills[i].SkillName" class="form-control mb-2" />
-                    <label>Proficiency</label>
-                    <select name="Skills[@i].Proficiency" class="form-select mb-2" required>
-                        <option value="">-- Select Level --</option>
-                        <option value="Beginner" selected="@(Model.Skills[i].Proficiency == "Beginner")">Beginner</option>
-                        <option value="Intermediate" selected="@(Model.Skills[i].Proficiency == "Intermediate")">Intermediate</option>
-                        <option value="Expert" selected="@(Model.Skills[i].Proficiency == "Expert")">Expert</option>
-                    </select>
-                    <button type="button" class="btn btn-danger btn-sm" onclick="removeItem(this)">Remove</button>
-                </div>
+                for (int i = 0; i < Model.Skills.Count; i++)
+                {
+                    <div class="rb-repeater-item skill-item">
+                        <input type="hidden" name="Skills[@i].SkillId" value="@Model.Skills[i].SkillId" />
+                        <button type="button" class="rb-remove-btn" onclick="removeItem(this)" aria-label="Remove skill">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path><path d="M10 11v6M14 11v6"></path></svg>
+                        </button>
+                        <div class="row">
+                            <div class="col-md-7 mb-0">
+                                <label class="form-label">Skill</label>
+                                <input name="Skills[@i].SkillName" value="@Model.Skills[i].SkillName" class="form-control" />
+                            </div>
+                            <div class="col-md-5 mb-0">
+                                <label class="form-label">Proficiency</label>
+                                <select name="Skills[@i].Proficiency" class="form-select">
+                                    <option value="">-- Select level --</option>
+                                    <option value="Beginner" selected="@(Model.Skills[i].Proficiency == "Beginner")">Beginner</option>
+                                    <option value="Intermediate" selected="@(Model.Skills[i].Proficiency == "Intermediate")">Intermediate</option>
+                                    <option value="Expert" selected="@(Model.Skills[i].Proficiency == "Expert")">Expert</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                }
             }
-        }
+        </div>
+        <button type="button" class="rb-add-btn" onclick="addSkill()">+ Add skill</button>
     </div>
-    <button type="button" class="btn btn-outline-primary mb-3" onclick="addSkill()">+ Add Skill</button>
 
-    <hr />
-    <button type="submit" class="btn btn-success">Save Changes</button>
-    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    <div class="d-flex gap-2 mb-5">
+        <button type="submit" class="btn btn-accent">Save changes</button>
+        <a asp-action="Index" class="btn btn-outline-primary">Back to list</a>
+    </div>
 </form>
 
 @section Scripts {
     <script>
+        const removeIconSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path><path d="M10 11v6M14 11v6"></path></svg>`;
+
         function removeItem(button) {
             button.closest('.education-item, .experience-item, .skill-item').remove();
             reindexFields();
@@ -134,18 +204,32 @@
             const container = document.getElementById('education-list');
             const index = container.querySelectorAll('.education-item').length;
             const html = `
-                        <div class="education-item mb-3 border p-3 rounded">
-                            <label>Institution</label>
-                            <input name="Educations[${index}].Institution" class="form-control mb-2" />
-                            <label>Degree</label>
-                            <input name="Educations[${index}].Degree" class="form-control mb-2" />
-                            <label>Field of Study</label>
-                            <input name="Educations[${index}].FieldOfStudy" class="form-control mb-2" />
-                            <label>Start Date</label>
-                            <input type="date" name="Educations[${index}].StartDate" class="form-control mb-2" />
-                            <label>End Date</label>
-                            <input type="date" name="Educations[${index}].EndDate" class="form-control mb-2" />
-                            <button type="button" class="btn btn-danger btn-sm" onclick="removeItem(this)">Remove</button>
+                        <div class="rb-repeater-item education-item">
+                            <button type="button" class="rb-remove-btn" onclick="removeItem(this)" aria-label="Remove education">${removeIconSvg}</button>
+                            <div class="row">
+                                <div class="col-md-6 mb-2">
+                                    <label class="form-label">Institution</label>
+                                    <input name="Educations[${index}].Institution" class="form-control" />
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <label class="form-label">Degree</label>
+                                    <input name="Educations[${index}].Degree" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Field of study</label>
+                                <input name="Educations[${index}].FieldOfStudy" class="form-control" />
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-0">
+                                    <label class="form-label">Start date</label>
+                                    <input type="date" name="Educations[${index}].StartDate" class="form-control" />
+                                </div>
+                                <div class="col-md-6 mb-0">
+                                    <label class="form-label">End date</label>
+                                    <input type="date" name="Educations[${index}].EndDate" class="form-control" />
+                                </div>
+                            </div>
                         </div>`;
             container.insertAdjacentHTML('beforeend', html);
         }
@@ -154,18 +238,32 @@
             const container = document.getElementById('experience-list');
             const index = container.querySelectorAll('.experience-item').length;
             const html = `
-                        <div class="experience-item mb-3 border p-3 rounded">
-                            <label>Company</label>
-                            <input name="Experiences[${index}].Company" class="form-control mb-2" />
-                            <label>Position</label>
-                            <input name="Experiences[${index}].Position" class="form-control mb-2" />
-                            <label>Description</label>
-                            <textarea name="Experiences[${index}].Description" class="form-control mb-2"></textarea>
-                            <label>Start Date</label>
-                            <input type="date" name="Experiences[${index}].StartDate" class="form-control mb-2" />
-                            <label>End Date</label>
-                            <input type="date" name="Experiences[${index}].EndDate" class="form-control mb-2" />
-                            <button type="button" class="btn btn-danger btn-sm" onclick="removeItem(this)">Remove</button>
+                        <div class="rb-repeater-item experience-item">
+                            <button type="button" class="rb-remove-btn" onclick="removeItem(this)" aria-label="Remove experience">${removeIconSvg}</button>
+                            <div class="row">
+                                <div class="col-md-6 mb-2">
+                                    <label class="form-label">Company</label>
+                                    <input name="Experiences[${index}].Company" class="form-control" />
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <label class="form-label">Position</label>
+                                    <input name="Experiences[${index}].Position" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Description</label>
+                                <textarea name="Experiences[${index}].Description" class="form-control" rows="2"></textarea>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-0">
+                                    <label class="form-label">Start date</label>
+                                    <input type="date" name="Experiences[${index}].StartDate" class="form-control" />
+                                </div>
+                                <div class="col-md-6 mb-0">
+                                    <label class="form-label">End date</label>
+                                    <input type="date" name="Experiences[${index}].EndDate" class="form-control" />
+                                </div>
+                            </div>
                         </div>`;
             container.insertAdjacentHTML('beforeend', html);
         }
@@ -174,31 +272,38 @@
             const container = document.getElementById('skill-list');
             const index = container.querySelectorAll('.skill-item').length;
             const html = `
-                        <div class="skill-item mb-3 border p-3 rounded">
-                            <label>Skill</label>
-                            <input name="Skills[${index}].SkillName" class="form-control mb-2" />
-                            <label>Proficiency</label>
-                            <input name="Skills[${index}].Proficiency" class="form-control mb-2" />
-                            <button type="button" class="btn btn-danger btn-sm" onclick="removeItem(this)">Remove</button>
+                        <div class="rb-repeater-item skill-item">
+                            <button type="button" class="rb-remove-btn" onclick="removeItem(this)" aria-label="Remove skill">${removeIconSvg}</button>
+                            <div class="row">
+                                <div class="col-md-7 mb-0">
+                                    <label class="form-label">Skill</label>
+                                    <input name="Skills[${index}].SkillName" class="form-control" />
+                                </div>
+                                <div class="col-md-5 mb-0">
+                                    <label class="form-label">Proficiency</label>
+                                    <select name="Skills[${index}].Proficiency" class="form-select">
+                                        <option value="">-- Select level --</option>
+                                        <option value="Beginner">Beginner</option>
+                                        <option value="Intermediate">Intermediate</option>
+                                        <option value="Expert">Expert</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>`;
             container.insertAdjacentHTML('beforeend', html);
         }
 
+        // Reindex fields to maintain correct name attributes after a removal
         function reindexFields() {
-            const sections = [
-                { selector: '.education-item', prefix: 'Educations' },
-                { selector: '.experience-item', prefix: 'Experiences' },
-                { selector: '.skill-item', prefix: 'Skills' }
-            ];
-
-            sections.forEach(s => {
-                document.querySelectorAll(s.selector).forEach((item, i) => {
-                    item.querySelectorAll('input, textarea').forEach(input => {
-                        const name = input.name.replace(/\[.*?\]/, `[${i}]`);
-                        input.name = name;
+            const sections = ['.education-item', '.experience-item', '.skill-item'];
+            sections.forEach(selector => {
+                document.querySelectorAll(selector).forEach((item, i) => {
+                    item.querySelectorAll('input, textarea, select').forEach(input => {
+                        input.name = input.name.replace(/\[.*?\]/, `[${i}]`);
                     });
                 });
             });
         }
     </script>
 }
+```

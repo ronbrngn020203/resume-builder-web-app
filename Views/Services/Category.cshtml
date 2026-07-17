@@ -1,29 +1,43 @@
 ﻿@model ResumeBuilderWebApp.Models.ServiceCategory
+@{
+    ViewData["Title"] = Model.Name;
+}
 
-<h2>@Model.Name</h2>
-<p class="text-muted">@Model.Description</p>
-<hr />
-
-<div class="row">
-    @foreach (var s in Model.Services)
-    {
-        <div class="col-md-4 mb-3">
-            <div class="card h-100 shadow-sm">
-                <img src="@s.ThumbnailPath" class="card-img-top" alt="@s.Title" />
-                <div class="card-body">
-                    <h5>@s.Title</h5>
-                    <p>@s.ShortDescription</p>
-                    <p><strong>@s.Price.ToString("C")</strong></p>
-                    <a class="btn btn-outline-primary btn-sm"
-                       href="@Url.Action("Details", "Services", new { id = s.ServiceId })">
-                        Details
-                    </a>
-                </div>
-            </div>
-        </div>
-    }
+<div class="rb-page-header">
+    <span class="rb-eyebrow">● @Model.Name</span>
+    <h2>@Model.Name</h2>
+    <p class="lead mb-0">@Model.Description</p>
 </div>
 
-<a href="@Url.Action("Index", "Services")" class="btn btn-link mt-3">
-    ← Back to Categories
+@if (Model.Services != null && Model.Services.Any())
+{
+    <div class="row">
+        @foreach (var s in Model.Services)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <img src="@s.ThumbnailPath" class="card-img-top" alt="@s.Title" style="border-radius: var(--radius-md) var(--radius-md) 0 0;" />
+                    <div class="card-body">
+                        <h5 class="card-title">@s.Title</h5>
+                        <p class="text-muted" style="color: var(--slate) !important;">@s.ShortDescription</p>
+                        <p class="fw-bold mb-3" style="color: var(--indigo);">@s.Price.ToString("C")</p>
+                        <a class="btn btn-outline-primary btn-sm"
+                           href="@Url.Action("Details", "Services", new { id = s.ServiceId })">
+                            View details
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="rb-empty-state">
+        <p class="mb-0">No services in this category yet — check back soon.</p>
+    </div>
+}
+
+<a href="@Url.Action("Index", "Services")" class="btn btn-link mt-3 ps-0">
+    ← Back to categories
 </a>
